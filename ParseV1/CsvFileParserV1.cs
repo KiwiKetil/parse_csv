@@ -43,7 +43,7 @@ public class CsvFileParserV1
 
             if (errorMessages.Count > 0)
             {
-                Console.WriteLine($"Failed parse on line {lineCounter}. Errors: {string.Join("; ", errorMessages)}");
+                Console.WriteLine($"Failed parse on line {lineCounter}. Found {errorMessages.Count} Error(s): {string.Join("; ", errorMessages)}");
                 continue;
             }
 
