@@ -1,7 +1,7 @@
 ﻿namespace ParseCsv.ParseV1;
 
 using ParseCsv.RegexHelper;
-public class CsvFileParserV1
+public static class CsvFileParserV1
 {
     public static List<string> ParseCsvFile(string filePath)
     {
@@ -16,7 +16,7 @@ public class CsvFileParserV1
         using var reader = new StreamReader(filePath);
         string? line;
 
-        //reader.ReadLine(); //// Optional: Skip header etc if activated
+        //reader.ReadLine(); //// Optional: Skip first row if activated
 
         while ((line = reader.ReadLine()) != null)
         {
@@ -25,12 +25,12 @@ public class CsvFileParserV1
 
             if (split is not [var firstName, var lastName, var email, var ageString, var country])
             {
-                Console.WriteLine($"Failed Parse on line {lineCounter}. Missing field(s). Current Data: {line}");
-                continue; 
+                Console.WriteLine($"Failed parse on line {lineCounter}. Invalid field count. {line}");
+                continue;
             }
 
             List<string> errorMessages = [];
-            
+
             if (!RegexHelper.EmailRegex().IsMatch(email))
             {
                 errorMessages.Add($"Invalid email: {email}");
@@ -43,7 +43,7 @@ public class CsvFileParserV1
 
             if (errorMessages.Count > 0)
             {
-                Console.WriteLine($"Failed parse on line {lineCounter}. Found {errorMessages.Count} Error(s): {string.Join("; ", errorMessages)}");
+                Console.WriteLine($"Failed parse on line {lineCounter}. Found {errorMessages.Count} Error(s): {string.Join(" | ", errorMessages)}");
                 continue;
             }
 
