@@ -28,15 +28,21 @@ public static class CsvFileParserV2
                 continue;
             }
 
+            List<string> errorMessages = [];
+
             if (string.IsNullOrWhiteSpace(Name) || string.IsNullOrWhiteSpace(Hex) || string.IsNullOrWhiteSpace(Rgb))
             {
-                Console.WriteLine($"Failed parse on line {lineCounter}. Line has empty or whitespace field(s). Actual data: {line}");
-                continue;
+                errorMessages.Add($"Line has empty or whitespace field(s) {line}");                
             }
 
             if (RegexHelper.ContainsSpecialCharacters(Name))
             {
-                Console.WriteLine($"Failed parse on line {lineCounter}. Invalid Name: {Name}");
+                errorMessages.Add($"Invalid Name: {Name}");               
+            }
+
+            if (errorMessages.Count > 0)
+            {
+                Console.WriteLine($"Failed parse on line {lineCounter}. Found {errorMessages.Count} Error(s): {string.Join(" | ", errorMessages)}");
                 continue;
             }
 
