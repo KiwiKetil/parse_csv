@@ -1,5 +1,7 @@
 ﻿namespace ParseCsv.ParseV2;
 
+using ParseCsv.RegexHelper;
+
 public static class CsvFileParserV2
 {
     public static List<string> ParseCsvFile2(string filePath)
@@ -31,9 +33,16 @@ public static class CsvFileParserV2
                 Console.WriteLine($"Failed parse on line {lineCounter}. Line has empty or whitespace field(s). Actual data: {line}");
                 continue;
             }
-            result.Add($"{Name}, {Hex}, {Rgb}");
 
+            if (RegexHelper.ContainsSpecialCharacters(Name))
+            {
+                Console.WriteLine($"Failed parse on line {lineCounter}. Invalid Name: {Name}");
+                continue;
+            }
+
+            result.Add($"{Name}, {Hex}, {Rgb}");
         }
+
         return result;
     }
 }
