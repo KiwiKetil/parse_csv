@@ -31,9 +31,24 @@ public static class CsvFileParserV1
 
             List<string> errorMessages = [];
 
-            if (!RegexHelper.EmailRegex().IsMatch(email))
+            if (!RegexHelper.IsValidEmail(email))
             {
                 errorMessages.Add($"Invalid email: {email}");
+            }
+
+            if (RegexHelper.ContainsSpecialCharacters(firstName))
+            {
+                errorMessages.Add($"Invalid firstName: {firstName}");
+            }
+
+            if (RegexHelper.ContainsSpecialCharacters(lastName))
+            {
+                errorMessages.Add($"Invalid lastName: {lastName}");
+            }
+
+            if (RegexHelper.ContainsSpecialCharacters(country))
+            {
+                errorMessages.Add($"Invalid country: {country}");
             }
 
             if (!int.TryParse(ageString, out int age))
