@@ -1,6 +1,8 @@
 ﻿namespace ParseCsv.ParseV1;
 
 using ParseCsv.RegexHelper;
+using Serilog;
+
 public static class CsvFileParserV1
 {
     public static List<string> ParseCsvFile(string filePath)
@@ -25,7 +27,7 @@ public static class CsvFileParserV1
 
             if (split is not [var firstName, var lastName, var email, var ageString, var country])
             {
-                Console.WriteLine($"Failed parse on line {lineCounter}. Invalid field count. {line}");
+                Log.Warning($"Failed parse on line {lineCounter}. Invalid field count. {line}");
                 continue;
             }
 
@@ -58,7 +60,7 @@ public static class CsvFileParserV1
 
             if (errorMessages.Count > 0)
             {
-                Console.WriteLine($"Failed parse on line {lineCounter}. Found {errorMessages.Count} Error(s): {string.Join(" | ", errorMessages)}");
+                Log.Warning($"Failed parse on line {lineCounter}. Found {errorMessages.Count} Error(s): {string.Join(" | ", errorMessages)}");
                 continue;
             }
 
