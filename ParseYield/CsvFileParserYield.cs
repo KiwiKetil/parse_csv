@@ -28,15 +28,22 @@ public static class CsvFileParserYield
         while ((line = reader.ReadLine()) != null)
         {
             lineCounter++;
-            HashSet<string> errorMessages = [];
+
+            if (string.IsNullOrWhiteSpace(line))
+            {
+                Log.Warning($"Line {lineCounter}: Empty row encountered.");
+                continue;
+            }
 
             var split = line.Split(',').Select(p => p.Trim().Trim('"')).ToArray();
 
             if (split is not [var province, var abbreviation])
             {
-                Log.Warning($"Failed parse on line {lineCounter}: {line} | Invalid field count. Field contains {split.Length} fields.");
+                Log.Warning($"Failed parse on line {lineCounter}: {line} | Invalid field count. Expected 2 fields, but found {split.Length} fields.");
                 continue;
             }
+
+            HashSet<string> errorMessages = [];
 
             if (string.IsNullOrWhiteSpace(province))
             {

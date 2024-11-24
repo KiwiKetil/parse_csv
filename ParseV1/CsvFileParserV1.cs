@@ -28,11 +28,18 @@ public static class CsvFileParserV1
         while ((line = reader.ReadLine()) != null)
         {
             lineCounter++;
+
+            if (string.IsNullOrWhiteSpace(line))
+            {
+                Log.Warning($"Line {lineCounter}: Empty row encountered.");
+                continue;
+            }
+
             var split = line.Split(',').Select(p => p.Trim().Trim('"')).ToArray();
 
             if (split is not [var firstName, var lastName, var email, var ageString, var country])
             {
-                Log.Warning($"Failed parse on line {lineCounter}: {line} | Invalid field count. Field contains {split.Length} fields.");
+                Log.Warning($"Failed parse on line {lineCounter}: {line} | Invalid field count. Expected 5 fields, found {split.Length} fields.");
                 continue;
             }
 

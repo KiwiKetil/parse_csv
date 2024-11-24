@@ -27,13 +27,19 @@ public static class CsvFileParserV2
         {
             lineCounter++;
 
+            if (string.IsNullOrWhiteSpace(line))
+            {
+                Log.Warning($"Line {lineCounter}: Empty row encountered.");
+                continue;
+            }
+
             var split = line.Split(',', 3).Select(p => p.Trim().Trim('"')).ToArray(); // 3 only works if there are exactly 3 fields and field with extra ',' is last field (split[2])
 
             HashSet<string> errorMessages = [];
 
             if (split is not [var name, var hex, var rgb])
             {
-                Log.Warning($"Failed parse on line {lineCounter}: {line} | Invalid field count. Field contains {split.Length} fields.");
+                Log.Warning($"Failed parse on line {lineCounter}: {line} | Invalid field count. Expected 3 fields, but found {split.Length} fields.");
                 continue;
             }
 
