@@ -28,7 +28,7 @@ public static class CsvFileParserYield
         while ((line = reader.ReadLine()) != null)
         {
             lineCounter++;
-            List<string> errorMessages = [];
+            HashSet<string> errorMessages = [];
 
             var split = line.Split(',').Select(p => p.Trim().Trim('"')).ToArray();
 

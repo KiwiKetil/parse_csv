@@ -5,7 +5,7 @@ using Serilog;
 
 public static class CsvFileParserV1
 {
-    public static List<string> ParseCsvFile(string filePath, bool skipHeader = true)
+    public static List<Person> ParseCsvFile(string filePath, bool skipHeader = true)
     {
         if (string.IsNullOrWhiteSpace(filePath) || !File.Exists(filePath))
         {
@@ -15,7 +15,7 @@ public static class CsvFileParserV1
         using var reader = new StreamReader(filePath);
 
         int lineCounter = 0;
-        List<string> result = [];
+        List<Person> result = [];
 
         string? line;
 
@@ -36,7 +36,7 @@ public static class CsvFileParserV1
                 continue;
             }
 
-            List<string> errorMessages = [];
+            HashSet<string> errorMessages = [];
 
             if (RegexHelper.ContainsSpecialCharacters(firstName))
             {
@@ -69,7 +69,16 @@ public static class CsvFileParserV1
                 continue;
             }
 
-            result.Add(line);
+            Person person = new() 
+            {
+                FirstName = firstName,
+                LastName = lastName,
+                Email = email,
+                Age = age,
+                Country = country            
+            };
+
+            result.Add(person);
         }
 
         return result;

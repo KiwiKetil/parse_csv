@@ -29,7 +29,7 @@ public static class CsvFileParserV2
 
             var split = line.Split(',', 3).Select(p => p.Trim().Trim('"')).ToArray(); // 3 only works if there are exactly 3 fields and field with extra ',' is last field (split[2])
 
-            List<string> errorMessages = [];
+            HashSet<string> errorMessages = [];
 
             if (split is not [var Name, var Hex, var Rgb])
             {

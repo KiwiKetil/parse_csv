@@ -13,7 +13,7 @@ Log.Logger = new LoggerConfiguration()
 // Parse V1
 Console.WriteLine("Parse v1:\n");
 string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ParseV1", "test_parsing_fail.csv");
-var res = CsvFileParserV1.ParseCsvFile(filePath);
+var res = CsvFileParserV1.ParseCsvFile(filePath, false);
 
 foreach (var line in res)
 {
@@ -41,8 +41,6 @@ var resYield = CsvFileParserYield.ParseCsvFileYield(filePathYield);
 
 foreach (var line in resYield)
     Console.WriteLine(line);
-
-
 
 // Ensure logs are flushed
 Log.CloseAndFlush();
