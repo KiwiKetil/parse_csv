@@ -32,7 +32,7 @@ public static class CsvFileParserV1
 
             if (split is not [var firstName, var lastName, var email, var ageString, var country])
             {
-                Log.Warning($"Failed parse on line {lineCounter}. Invalid field count. {line}");
+                Log.Warning($"Failed parse on line {lineCounter}: {line} | Invalid field count. Field contains {split.Length} fields.");
                 continue;
             }
 
@@ -65,7 +65,7 @@ public static class CsvFileParserV1
 
             if (errorMessages.Count > 0)
             {
-                Log.Warning($"Failed parse on line {lineCounter}. Found {errorMessages.Count} Error(s): {string.Join(" | ", errorMessages)}");
+                Log.Warning($"Failed parse on line {lineCounter}: {line} | Found {errorMessages.Count} Error(s): | {string.Join(" | ", errorMessages)}");
                 continue;
             }
 

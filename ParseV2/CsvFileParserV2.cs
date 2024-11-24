@@ -31,29 +31,39 @@ public static class CsvFileParserV2
 
             HashSet<string> errorMessages = [];
 
-            if (split is not [var Name, var Hex, var Rgb])
+            if (split is not [var name, var hex, var rgb])
             {
-                Log.Warning($"Failed parse on line {lineCounter}. Invalid field count. {line}");
+                Log.Warning($"Failed parse on line {lineCounter}: {line} | Invalid field count. Field contains {split.Length} fields.");
                 continue;
             }
 
-            if (string.IsNullOrWhiteSpace(Name) || string.IsNullOrWhiteSpace(Hex) || string.IsNullOrWhiteSpace(Rgb))
+            if (string.IsNullOrWhiteSpace(name))
             {
-                errorMessages.Add($"Empty or whitespace field(s): {line}");
+                errorMessages.Add($"Empty or whitespace field: {nameof(name)}");
             }
 
-            if (RegexHelper.ContainsSpecialCharacters(Name))
+            if (string.IsNullOrWhiteSpace(hex))
             {
-                errorMessages.Add($"Invalid Name: {Name}");
+                errorMessages.Add($"Empty or whitespace field: {nameof(hex)}");
+            }
+
+            if (string.IsNullOrWhiteSpace(rgb))
+            {
+                errorMessages.Add($"Empty or whitespace field: {nameof(rgb)}");
+            }
+
+            if (RegexHelper.ContainsSpecialCharacters(name))
+            {
+                errorMessages.Add($"Invalid Name: {name}");
             }
 
             if (errorMessages.Count > 0)
             {
-                Log.Warning($"Failed parse on line {lineCounter}. Found {errorMessages.Count} Error(s): {string.Join(" | ", errorMessages)}");
+                Log.Warning($"Failed parse on line {lineCounter}: {line} | Found {errorMessages.Count} Error(s): | {string.Join(" | ", errorMessages)}");
                 continue;
             }
 
-            result.Add($"{Name}, {Hex}, {Rgb}");
+            result.Add($"{name}, {hex}, {rgb}");
         }
 
         return result;

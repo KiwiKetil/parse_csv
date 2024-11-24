@@ -34,13 +34,18 @@ public static class CsvFileParserYield
 
             if (split is not [var province, var abbreviation])
             {
-               Log.Warning($"Failed parse on line {lineCounter}. Invalid field count. {line}");
+                Log.Warning($"Failed parse on line {lineCounter}: {line} | Invalid field count. Field contains {split.Length} fields.");
                 continue;
             }
 
-            if (string.IsNullOrWhiteSpace(province) || string.IsNullOrWhiteSpace(abbreviation))
+            if (string.IsNullOrWhiteSpace(province))
             {
-                errorMessages.Add($"Empty or whitespace field(s): {line}");
+                errorMessages.Add($"Empty or whitespace field: {nameof(province)}");
+            }
+
+            if (string.IsNullOrWhiteSpace(abbreviation))
+            {
+                errorMessages.Add($"Empty or whitespace field: {nameof(abbreviation)}");
             }
 
             if (RegexHelper.ContainsSpecialCharacters(province)) 
@@ -55,7 +60,7 @@ public static class CsvFileParserYield
 
             if (errorMessages.Count > 0)
             {
-                Log.Warning($"Failed parse on line {lineCounter}. Found {errorMessages.Count} Error(s): {string.Join(" | ", errorMessages)}");
+                Log.Warning($"Failed parse on line {lineCounter}: {line} | Found {errorMessages.Count} Error(s): | {string.Join(" | ", errorMessages)}");
                 continue;
             }
 
