@@ -11,11 +11,11 @@ public static partial class RegexHelper
         return EmailRegex().IsMatch(input);
     }
 
-    [GeneratedRegex(@"[^a-zA-Z0-9]")]
-    private static partial Regex MyRegex2();
+    [GeneratedRegex(@"[^a-zA-Z0-9 ]")]
+    private static partial Regex SpecialCharacterRegex2();
 
     public static bool ContainsSpecialCharacters(string input)
     {
-        return MyRegex2().IsMatch(input);
+        return SpecialCharacterRegex2().IsMatch(input);
     }
 }

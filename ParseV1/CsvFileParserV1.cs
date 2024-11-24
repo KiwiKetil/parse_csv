@@ -5,26 +5,30 @@ using Serilog;
 
 public static class CsvFileParserV1
 {
-    public static List<string> ParseCsvFile(string filePath)
+    public static List<string> ParseCsvFile(string filePath, bool skipHeader = true)
     {
         if (string.IsNullOrWhiteSpace(filePath) || !File.Exists(filePath))
         {
             throw new FileNotFoundException("File path is invalid or file does not exist.");
         }
 
+        using var reader = new StreamReader(filePath);
+
         int lineCounter = 0;
         List<string> result = [];
 
-        using var reader = new StreamReader(filePath);
         string? line;
 
-        reader.ReadLine(); // Optional: Skip first row if activated
-        lineCounter++; // Activate if above reader.ReadLine() is used in order to keep lineCount correct)
+        if (skipHeader)
+        {
+            reader.ReadLine();
+            lineCounter++;
+        }
 
         while ((line = reader.ReadLine()) != null)
         {
             lineCounter++;
-            var split = line.Split(',').Select(p => p.Trim()).ToArray();
+            var split = line.Split(',').Select(p => p.Trim().Trim('"')).ToArray();
 
             if (split is not [var firstName, var lastName, var email, var ageString, var country])
             {

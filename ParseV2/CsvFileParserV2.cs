@@ -5,7 +5,7 @@ using Serilog;
 
 public static class CsvFileParserV2
 {
-    public static List<string> ParseCsvFile2(string filePath)
+    public static List<string> ParseCsvFile2(string filePath, bool skipHeader = true)
     {
         if (string.IsNullOrWhiteSpace(filePath) || !File.Exists(filePath))
         {
@@ -15,14 +15,21 @@ public static class CsvFileParserV2
         int lineCounter = 0;
         List<string> result = [];
 
-        var lines = File.ReadLines(filePath).Skip(1); // adjust if needed
-        lineCounter++; // activate if skipping header line (Skip(1))
+        IEnumerable<string> lines = File.ReadLines(filePath);
+
+        if (skipHeader)
+        {
+            lines = lines.Skip(1);
+            lineCounter++;
+        }
 
         foreach (string line in lines)
         {
             lineCounter++;
 
-            var split = line.Split(',', 3).Select(p => p.Trim().Trim('"')).ToArray(); // 3 only works if exactly 3 fields and field causing issues is split[2]
+            var split = line.Split(',', 3).Select(p => p.Trim().Trim('"')).ToArray(); // 3 only works if there are exactly 3 fields and field with extra ',' is last field (split[2])
+
+            List<string> errorMessages = [];
 
             if (split is not [var Name, var Hex, var Rgb])
             {
@@ -30,11 +37,9 @@ public static class CsvFileParserV2
                 continue;
             }
 
-            List<string> errorMessages = [];
-
             if (string.IsNullOrWhiteSpace(Name) || string.IsNullOrWhiteSpace(Hex) || string.IsNullOrWhiteSpace(Rgb))
             {
-                errorMessages.Add($"Line has empty or whitespace field(s) {line}");
+                errorMessages.Add($"Empty or whitespace field(s): {line}");
             }
 
             if (RegexHelper.ContainsSpecialCharacters(Name))
