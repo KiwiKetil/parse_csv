@@ -19,7 +19,7 @@ public static class CsvFileParserV1
         string? line;
 
         reader.ReadLine(); // Optional: Skip first row if activated
-        lineCounter++; // Activate if skip 1st line
+        lineCounter++; // Activate if above reader.ReadLine() is used in order to keep lineCount correct)
 
         while ((line = reader.ReadLine()) != null)
         {
