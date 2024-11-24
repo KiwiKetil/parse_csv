@@ -15,7 +15,8 @@ public static class CsvFileParserV2
         int lineCounter = 0;
         List<string> result = [];
 
-        var lines = File.ReadLines(filePath).Skip(0); // adjust if needed
+        var lines = File.ReadLines(filePath).Skip(1); // adjust if needed
+        lineCounter++; // activate if skipping header line
 
         foreach (string line in lines)
         {

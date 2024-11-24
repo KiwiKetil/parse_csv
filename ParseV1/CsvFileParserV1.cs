@@ -18,7 +18,8 @@ public static class CsvFileParserV1
         using var reader = new StreamReader(filePath);
         string? line;
 
-        //reader.ReadLine(); //// Optional: Skip first row if activated
+        reader.ReadLine(); // Optional: Skip first row if activated
+        lineCounter++; // Activate if skip 1st line
 
         while ((line = reader.ReadLine()) != null)
         {
