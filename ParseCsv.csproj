@@ -14,18 +14,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="ParseV2\color_srgb.csv">
+    <Content Include="Files\color_srgb.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="ParseYield\province_ca.csv">
+    <Content Include="Files\province_ca.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="ParseV1\test_parsing_fail.csv">
+    <Content Include="Files\person.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="11.11.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0" />
     <PackageReference Include="Serilog" Version="4.1.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />

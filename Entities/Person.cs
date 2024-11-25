@@ -1,4 +1,4 @@
-﻿namespace ParseCsv.ParseV1;
+﻿namespace ParseCsv.Entities;
 public class Person
 {
     public required string FirstName { get; set; }

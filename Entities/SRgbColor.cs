@@ -1,4 +1,4 @@
-﻿namespace ParseCsv.ParseV2;
+﻿namespace ParseCsv.Entities;
 public class SRgbColor
 {
     public required string Name { get; set; }
