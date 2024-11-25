@@ -15,7 +15,7 @@ public static class CsvParser_v1
         using var reader = new StreamReader(filePath);
 
         int lineCounter = 0;
-        List<Person> result = new();
+        List<Person> result = [];
 
         string? line;
 
@@ -43,16 +43,16 @@ public static class CsvParser_v1
                 continue;
             }
 
-            HashSet<string> errors = new();
+            HashSet<string> errors = []; // remove
 
             if (!int.TryParse(ageStr, out int age))
             {
-                errors.Add($"Could not parse age: {ageStr}");
+                errors.Add($"Could not parse age: {ageStr}");   // log warning
             }
 
-            errors.UnionWith(ValidateCsvFields(firstName, lastName, email, country));
+            errors.UnionWith(ValidateCsvFields(firstName, lastName, email, country)); //remove
 
-            if (errors.Count > 0)
+            if (errors.Count > 0) // remove
             {
                 Log.Warning($"Failed on line {lineCounter}: {line} | Found {errors.Count} Error(s): | {string.Join(" | ", errors)}");
                 continue; 
