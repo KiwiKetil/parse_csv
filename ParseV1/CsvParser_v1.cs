@@ -9,7 +9,7 @@ public static class CsvParser_v1
     {
         if (string.IsNullOrWhiteSpace(filePath) || !File.Exists(filePath))
         {
-            throw new FileNotFoundException("File path is invalid or file does not exist.");
+            throw new ArgumentException($"Filepath: \"{filePath}\" is invalid or file does not exist.");
         }
 
         using var reader = new StreamReader(filePath);
