@@ -1,7 +1,7 @@
-﻿namespace ParseCsv.ParseV2;
+﻿using Serilog;
+using static ParseCsv.ParseV2.ValidateFieldsV2;
 
-using ParseCsv.RegexHelper;
-using Serilog;
+namespace ParseCsv.ParseV2;
 
 public static class CsvParser_v2
 {
@@ -35,37 +35,17 @@ public static class CsvParser_v2
 
             var split = line.Split(',', 3).Select(p => p.Trim().Trim('"')).ToArray(); // 3 only works if there are exactly 3 fields and field with extra ',' is last field (split[2])
 
-            HashSet<string> errorMessages = [];
-
             if (split is not [var name, var hex, var rgb])
             {
                 Log.Warning($"Failed parse on line {lineCounter}: {line} | Invalid field count. Expected 3 fields, but found {split.Length} fields.");
                 continue;
             }
 
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                errorMessages.Add($"Empty or whitespace field: {nameof(name)}");
-            }
+            var validationErrors = ValidateCsvFields(name, hex, rgb);
 
-            if (string.IsNullOrWhiteSpace(hex))
+            if (validationErrors.Count > 0)
             {
-                errorMessages.Add($"Empty or whitespace field: {nameof(hex)}");
-            }
-
-            if (string.IsNullOrWhiteSpace(rgb))
-            {
-                errorMessages.Add($"Empty or whitespace field: {nameof(rgb)}");
-            }
-
-            if (RegexHelper.ContainsSpecialCharacters(name))
-            {
-                errorMessages.Add($"Invalid Name: {name}");
-            }
-
-            if (errorMessages.Count > 0)
-            {
-                Log.Warning($"Failed parse on line {lineCounter}: {line} | Found {errorMessages.Count} Error(s): | {string.Join(" | ", errorMessages)}");
+                Log.Warning($"Failed parse on line {lineCounter}: {line} | Found {validationErrors.Count} Error(s): | {string.Join(" | ", validationErrors)}");
                 continue;
             }
 
@@ -73,7 +53,7 @@ public static class CsvParser_v2
             {
                 Name = name,
                 Hex = hex,
-                Rgb = rgb,  
+                Rgb = rgb,
             };
 
             result.Add(sRgb);

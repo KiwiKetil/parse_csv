@@ -1,9 +1,7 @@
 ﻿using Serilog;
+using static ParseCsv.ParseYield.ValidateFieldsV3;
 
 namespace ParseCsv.ParseYield;
-
-using ParseCsv.RegexHelper;
-
 public static class CsvParser_v3_Yield
 {
     public static IEnumerable<ProvinceInfo> ParseCsvFileYield(string filePath, bool skipHeader = true)
@@ -43,37 +41,17 @@ public static class CsvParser_v3_Yield
                 continue;
             }
 
-            HashSet<string> errorMessages = [];
+            var validationErrors = ValidateCsvFields(province, abbreviation);
 
-            if (string.IsNullOrWhiteSpace(province))
+            if (validationErrors.Count > 0)
             {
-                errorMessages.Add($"Empty or whitespace field: {nameof(province)}");
-            }
-
-            if (string.IsNullOrWhiteSpace(abbreviation))
-            {
-                errorMessages.Add($"Empty or whitespace field: {nameof(abbreviation)}");
-            }
-
-            if (RegexHelper.ContainsSpecialCharacters(province))
-            {
-                errorMessages.Add($"Invalid Name: {province}");
-            }
-
-            if (RegexHelper.ContainsSpecialCharacters(abbreviation))
-            {
-                errorMessages.Add($"Invalid Name: {abbreviation}");
-            }
-
-            if (errorMessages.Count > 0)
-            {
-                Log.Warning($"Failed parse on line {lineCounter}: {line} | Found {errorMessages.Count} Error(s): | {string.Join(" | ", errorMessages)}");
+                Log.Warning($"Failed parse on line {lineCounter}: {line} | Found {validationErrors.Count} Error(s): | {string.Join(" | ", validationErrors)}");
                 continue;
             }
 
             ProvinceInfo provinceInfo = new()
             {
-                Province = province,    
+                Province = province,
                 Abbreviation = abbreviation,
             };
 

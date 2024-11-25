@@ -1,7 +1,7 @@
-﻿namespace ParseCsv.ParseV1;
+﻿using Serilog;
+using static ParseCsv.ParseV1.ValidateFieldsV1;
 
-using ParseCsv.RegexHelper;
-using Serilog;
+namespace ParseCsv.ParseV1;
 
 public static class CsvParser_v1
 {
@@ -15,7 +15,7 @@ public static class CsvParser_v1
         using var reader = new StreamReader(filePath);
 
         int lineCounter = 0;
-        List<Person> result = [];
+        List<Person> result = new();
 
         string? line;
 
@@ -39,50 +39,32 @@ public static class CsvParser_v1
 
             if (split is not [var firstName, var lastName, var email, var ageStr, var country])
             {
-                Log.Warning($"Failed parse on line {lineCounter}: {line} | Invalid field count. Expected 5 fields, found {split.Length} fields.");
+                Log.Warning($"Failed on line {lineCounter}: {line} | Invalid field count. Expected 5 fields, found {split.Length} fields.");
                 continue;
             }
 
-            HashSet<string> errorMessages = [];
-
-            if (RegexHelper.ContainsSpecialCharacters(firstName))
-            {
-                errorMessages.Add($"Invalid firstName: {firstName}");
-            }
-
-            if (RegexHelper.ContainsSpecialCharacters(lastName))
-            {
-                errorMessages.Add($"Invalid lastName: {lastName}");
-            }
-
-            if (!RegexHelper.IsValidEmail(email))
-            {
-                errorMessages.Add($"Invalid email: {email}");
-            }
+            HashSet<string> errors = new();
 
             if (!int.TryParse(ageStr, out int age))
             {
-                errorMessages.Add($"Invalid age: {ageStr}");
+                errors.Add($"Could not parse age: {ageStr}");
             }
 
-            if (RegexHelper.ContainsSpecialCharacters(country))
+            errors.UnionWith(ValidateCsvFields(firstName, lastName, email, country));
+
+            if (errors.Count > 0)
             {
-                errorMessages.Add($"Invalid country: {country}");
+                Log.Warning($"Failed on line {lineCounter}: {line} | Found {errors.Count} Error(s): | {string.Join(" | ", errors)}");
+                continue; 
             }
 
-            if (errorMessages.Count > 0)
-            {
-                Log.Warning($"Failed parse on line {lineCounter}: {line} | Found {errorMessages.Count} Error(s): | {string.Join(" | ", errorMessages)}");
-                continue;
-            }
-
-            Person person = new() 
+            Person person = new()
             {
                 FirstName = firstName,
                 LastName = lastName,
                 Email = email,
                 Age = age,
-                Country = country            
+                Country = country
             };
 
             result.Add(person);
@@ -91,4 +73,3 @@ public static class CsvParser_v1
         return result;
     }
 }
-

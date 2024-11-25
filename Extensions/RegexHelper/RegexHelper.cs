@@ -12,10 +12,10 @@ public static partial class RegexHelper
     }
 
     [GeneratedRegex(@"[^a-zA-Z0-9 ]")]
-    private static partial Regex SpecialCharacterRegex2();
+    private static partial Regex SpecialCharacterRegex();
 
     public static bool ContainsSpecialCharacters(string input)
     {
-        return SpecialCharacterRegex2().IsMatch(input);
+        return SpecialCharacterRegex().IsMatch(input);
     }
 }
