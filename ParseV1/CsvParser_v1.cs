@@ -3,7 +3,7 @@
 using ParseCsv.RegexHelper;
 using Serilog;
 
-public static class CsvFileParserV1
+public static class CsvParser_v1
 {
     public static List<Person> ParseCsvFile(string filePath, bool skipHeader = true)
     {
@@ -37,7 +37,7 @@ public static class CsvFileParserV1
 
             var split = line.Split(',').Select(p => p.Trim().Trim('"')).ToArray();
 
-            if (split is not [var firstName, var lastName, var email, var ageString, var country])
+            if (split is not [var firstName, var lastName, var email, var ageStr, var country])
             {
                 Log.Warning($"Failed parse on line {lineCounter}: {line} | Invalid field count. Expected 5 fields, found {split.Length} fields.");
                 continue;
@@ -60,9 +60,9 @@ public static class CsvFileParserV1
                 errorMessages.Add($"Invalid email: {email}");
             }
 
-            if (!int.TryParse(ageString, out int age))
+            if (!int.TryParse(ageStr, out int age))
             {
-                errorMessages.Add($"Invalid age: {ageString}");
+                errorMessages.Add($"Invalid age: {ageStr}");
             }
 
             if (RegexHelper.ContainsSpecialCharacters(country))

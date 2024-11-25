@@ -4,9 +4,9 @@ namespace ParseCsv.ParseYield;
 
 using ParseCsv.RegexHelper;
 
-public static class CsvFileParserYield
+public static class CsvParser_v3_Yield
 {
-    public static IEnumerable<string> ParseCsvFileYield(string filePath, bool skipHeader = true)
+    public static IEnumerable<ProvinceInfo> ParseCsvFileYield(string filePath, bool skipHeader = true)
     {
         if (string.IsNullOrWhiteSpace(filePath) || !File.Exists(filePath))
         {
@@ -55,7 +55,7 @@ public static class CsvFileParserYield
                 errorMessages.Add($"Empty or whitespace field: {nameof(abbreviation)}");
             }
 
-            if (RegexHelper.ContainsSpecialCharacters(province)) 
+            if (RegexHelper.ContainsSpecialCharacters(province))
             {
                 errorMessages.Add($"Invalid Name: {province}");
             }
@@ -71,7 +71,13 @@ public static class CsvFileParserYield
                 continue;
             }
 
-            yield return $"{province}, {abbreviation}";
+            ProvinceInfo provinceInfo = new()
+            {
+                Province = province,    
+                Abbreviation = abbreviation,
+            };
+
+            yield return provinceInfo;
         }
     }
 }

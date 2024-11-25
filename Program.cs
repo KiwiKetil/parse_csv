@@ -13,7 +13,7 @@ Log.Logger = new LoggerConfiguration()
 // Parse V1
 Console.WriteLine("Parse v1:\n");
 string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ParseV1", "test_parsing_fail.csv");
-var res = CsvFileParserV1.ParseCsvFile(filePath, false);
+var res = CsvParser_v1.ParseCsvFile(filePath, false);
 
 foreach (var line in res)
 {
@@ -26,7 +26,7 @@ Console.WriteLine();
 Console.WriteLine("Parse v2:\n");
 string filePath2 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ParseV2", "color_srgb.csv");
 
-var res2 = CsvFileParserV2.ParseCsvFile2(filePath2);
+var res2 = CsvParser_v2.ParseCsvFile2(filePath2);
 foreach (var line in res2)
 {
     Console.WriteLine(line);
@@ -37,7 +37,7 @@ Console.WriteLine();
 // ParseYield
 Console.WriteLine("Parse yield:\n");
 string filePathYield = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ParseYield", "province_ca.csv");
-var resYield = CsvFileParserYield.ParseCsvFileYield(filePathYield);
+var resYield = CsvParser_v3_Yield.ParseCsvFileYield(filePathYield);
 
 foreach (var line in resYield)
     Console.WriteLine(line);

@@ -9,13 +9,6 @@ public class Person
 
     public override string ToString()
     {
-        return $"{FirstName} {LastName} {Email} {Age} {Country}";
+        return $"{FirstName}, {LastName}, {Email}, {Age}, {Country}";
     }
 }
-
-  
-
-//James,Weirdo,john.doeexample.com,abc,USA
-//Jane, Smith,jane.smith @example.com,34, Canada
-//"Indiana", Jones, indaemail.no,4z4, Fran'ce
-//Jens, Jensemann

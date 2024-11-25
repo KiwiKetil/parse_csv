@@ -3,9 +3,9 @@
 using ParseCsv.RegexHelper;
 using Serilog;
 
-public static class CsvFileParserV2
+public static class CsvParser_v2
 {
-    public static List<string> ParseCsvFile2(string filePath, bool skipHeader = true)
+    public static List<SRgbColor> ParseCsvFile2(string filePath, bool skipHeader = true)
     {
         if (string.IsNullOrWhiteSpace(filePath) || !File.Exists(filePath))
         {
@@ -13,9 +13,9 @@ public static class CsvFileParserV2
         }
 
         int lineCounter = 0;
-        List<string> result = [];
+        List<SRgbColor> result = [];
 
-        IEnumerable<string> lines = File.ReadLines(filePath);
+        var lines = File.ReadLines(filePath);
 
         if (skipHeader)
         {
@@ -69,7 +69,14 @@ public static class CsvFileParserV2
                 continue;
             }
 
-            result.Add($"{name}, {hex}, {rgb}");
+            SRgbColor sRgb = new()
+            {
+                Name = name,
+                Hex = hex,
+                Rgb = rgb,  
+            };
+
+            result.Add(sRgb);
         }
 
         return result;
