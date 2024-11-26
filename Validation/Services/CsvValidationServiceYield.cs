@@ -1,21 +1,22 @@
 ﻿using FluentValidation.Results;
 using Newtonsoft.Json;
+using ParseCsv.Validation.Factory;
 using Serilog;
 
-namespace ParseCsv.Services;
-public class ValidationService
+namespace ParseCsv.Validation.Services;
+public class CsvValidationServiceYield
 {
-    public static void CsvValidator<T>(List<T> list)
-        where T : class
+    public static IEnumerable<T> CsvValidatorYield<T>(List<T> list)
+       where T : class
     {
         if (list == null || list.Count == 0)
         {
             Log.Warning("CSV validation skipped: The provided list is empty.");
-            return;
+            yield break; 
         }
         var validator = ValidatorFactory.GetValidator<T>();
         int validCount = 0;
-        int inValidCount = 0;
+        int invalidCount = 0;
 
         foreach (var item in list)
         {
@@ -24,13 +25,14 @@ public class ValidationService
             if (validationResult.IsValid)
             {
                 validCount++;
-                Log.Information($"Validation success for {item!.GetType().Name}: {JsonConvert.SerializeObject(item)}"); //null check?
+                Log.Information($"Validation success for {item!.GetType().Name}: {JsonConvert.SerializeObject(item)}");
+                yield return item;
             }
             else
             {
-                inValidCount++;
+                invalidCount++;
                 var aggregatedErrors = string.Join(" | ", validationResult.Errors.Select(e => e.ErrorMessage));
-                Log.Warning($"Validation failed for {item!.GetType().Name}: {JsonConvert.SerializeObject(item)} Errors({validationResult.Errors.Count}): {aggregatedErrors}");//null check?
+                Log.Warning($"Validation failed for {item!.GetType().Name}: {JsonConvert.SerializeObject(item)} Errors({validationResult.Errors.Count}): {aggregatedErrors}");
             }
         }
         Console.WriteLine();

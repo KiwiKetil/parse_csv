@@ -4,7 +4,7 @@ using Serilog;
 namespace ParseCsv.Parsers;
 public static class ParseCsvProvince
 {
-    public static IEnumerable<Province> ParseProvince(string filePath, bool skipHeader = true)
+    public static IEnumerable<Province> ParseProvince(string filePath, bool? skipHeader = false)
     {
         if (string.IsNullOrWhiteSpace(filePath) || !File.Exists(filePath))
         {
@@ -14,8 +14,9 @@ public static class ParseCsvProvince
         using var reader = new StreamReader(filePath);
 
         int lineCounter = 0;
+        int validCount = 0;
 
-        if (skipHeader)
+        if (skipHeader == true)
         {
             reader.ReadLine();
             lineCounter++;
@@ -29,7 +30,7 @@ public static class ParseCsvProvince
 
             if (string.IsNullOrWhiteSpace(line))
             {
-                Log.Warning($"Line {lineCounter}: Empty row encountered.");
+                Log.Warning($"Failed to parse line {lineCounter}: Empty row encountered.");
                 continue;
             }
 
@@ -37,15 +38,7 @@ public static class ParseCsvProvince
 
             if (split is not [var province, var abbreviation])
             {
-                Log.Warning($"Failed parse on line {lineCounter}: {line} | Invalid field count. Expected 2 fields, but found {split.Length} fields.");
-                continue;
-            }
-
-            var validationErrors = ValidateCsvFields(province, abbreviation);
-
-            if (validationErrors.Count > 0)
-            {
-                Log.Warning($"Failed parse on line {lineCounter}: {line} | Found {validationErrors.Count} Error(s): | {string.Join(" | ", validationErrors)}");
+                Log.Warning($"Failed to parse line {lineCounter}: Invalid field count. Expected 2 fields but found {split.Length}.");
                 continue;
             }
 
@@ -56,6 +49,11 @@ public static class ParseCsvProvince
             };
 
             yield return provinceInfo;
+            validCount++; 
+            Log.Information($"Successfully parsed line {lineCounter}: {province}, {abbreviation}"); 
         }
+        Console.WriteLine();
+        int totalProcessedLines = lineCounter - (skipHeader == true ? 1 : 0);
+        Log.Information($"Parse completed. Total valid parsed: {validCount} out of {totalProcessedLines}"); 
     }
 }

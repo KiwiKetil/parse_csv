@@ -16,15 +16,15 @@ public static class ParseCsvPerson
 
         int lineCounter = 0;
         int validCount = 0;
-        List<Person> result = [];
-
-        string? line;
+        List<Person> result = [];        
 
         if (skipHeader == true)
         {
             reader.ReadLine();
             lineCounter++; 
         }
+
+        string? line;
 
         while ((line = reader.ReadLine()) != null)
         {
@@ -48,21 +48,20 @@ public static class ParseCsvPerson
             {
                 Log.Warning($"Failed to parse line {lineCounter}: {firstName}, {lastName}, {email}, {age}, {country} Invalid 'int' data type for 'age' field. Value: '{ageStr}'.");
                 continue;
-            }
-            else
+            }          
+            
+            Person person = new()
             {
-                Person person = new()
-                {
-                    FirstName = firstName,
-                    LastName = lastName,
-                    Email = email,
-                    Age = age,
-                    Country = country
-                };
-                Log.Information($"Successfully parsed line {lineCounter}: {firstName}, {lastName}, {email}, {age}, {country}");
-                validCount++;
-                result.Add(person);
-            }
+                FirstName = firstName,
+                LastName = lastName,
+                Email = email,
+                Age = age,
+                Country = country
+            };
+            Log.Information($"Successfully parsed line {lineCounter}: {firstName}, {lastName}, {email}, {age}, {country}");
+            validCount++;
+            result.Add(person);
+            
         }
         Console.WriteLine();
         int totalProcessedLines = lineCounter - (skipHeader == true ? 1 : 0);

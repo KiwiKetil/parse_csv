@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
 using ParseCsv.Entities;
-using ParseCsv.Validators;
+using ParseCsv.Validation.Validators;
 
-namespace ParseCsv.Services;
+namespace ParseCsv.Validation.Factory;
 public static class ValidatorFactory
 {
     public static IValidator<T> GetValidator<T>()
@@ -14,6 +14,10 @@ public static class ValidatorFactory
         if (typeof(T) == typeof(RgbColor))
         {
             return (IValidator<T>)new RgbValidator();
+        }
+        if (typeof(T) == typeof(Province))
+        {
+            return (IValidator<T>)new ProvinceValidator();
         }
         throw new NotSupportedException($"No validator found for type {typeof(T).Name}");
     }
