@@ -5,7 +5,7 @@ namespace ParseCsv.Parsers;
 
 public static class ParseCsvPerson
 {
-    public static List<Person> ParsePerson(string filePath, bool skipHeader = true)
+    public static List<Person> ParsePerson(string filePath, bool? skipHeader = false)
     {
         if (string.IsNullOrWhiteSpace(filePath) || !File.Exists(filePath))
         {
@@ -20,10 +20,10 @@ public static class ParseCsvPerson
 
         string? line;
 
-        if (skipHeader)
+        if (skipHeader == true)
         {
             reader.ReadLine();
-            lineCounter++;
+            lineCounter++; 
         }
 
         while ((line = reader.ReadLine()) != null)
@@ -46,7 +46,7 @@ public static class ParseCsvPerson
 
             if (!int.TryParse(ageStr, out int age))
             {
-                Log.Warning($"Failed to parse line {lineCounter}: Invalid 'int' data type for the 'age' field. Value: '{ageStr}'.");
+                Log.Warning($"Failed to parse line {lineCounter}: {firstName}, {lastName}, {email}, {age}, {country} Invalid 'int' data type for 'age' field. Value: '{ageStr}'.");
                 continue;
             }
             else
@@ -65,7 +65,8 @@ public static class ParseCsvPerson
             }
         }
         Console.WriteLine();
-        Log.Information($"Parse completed. Total valid parsed: {validCount} out of {lineCounter}");
+        int totalProcessedLines = lineCounter - (skipHeader == true ? 1 : 0);
+        Log.Information($"Parse completed. Total valid parsed: {validCount} out of {totalProcessedLines}");
         return result;
     }
 }

@@ -5,7 +5,7 @@ namespace ParseCsv.Parsers;
 
 public static class ParseCsvRgbColor
 {
-    public static List<RgbColor> ParseRgbColor(string filePath, bool skipHeader = true)
+    public static List<RgbColor> ParseRgbColor(string filePath, bool? skipHeader = false)
     {
         if (string.IsNullOrWhiteSpace(filePath) || !File.Exists(filePath))
         {
@@ -18,7 +18,7 @@ public static class ParseCsvRgbColor
 
         var lines = File.ReadLines(filePath);
 
-        if (skipHeader)
+        if (skipHeader == true)
         {
             lines = lines.Skip(1);
             lineCounter++;
@@ -53,7 +53,8 @@ public static class ParseCsvRgbColor
             Log.Information($"Successfully parsed line {lineCounter}: {name} {hex}, {rgb}");
         }
         Console.WriteLine();
-        Log.Information($"Parse completed. Total valid parsed: {validCount} out of {lineCounter}");
+        int totalProcessedLines = lineCounter - (skipHeader == true ? 1 : 0);
+        Log.Information($"Parse completed. Total valid parsed: {validCount} out of {totalProcessedLines}");
         return result;
     }
 }

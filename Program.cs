@@ -10,25 +10,27 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.File(Path.Combine(projectDirectory!, "logs/logs-.log"), rollingInterval: RollingInterval.Day)
     .CreateLogger();
 
-
+/*
 // Parse V1
 Console.WriteLine("Parse v1:");
 string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Files", "person.csv");
-var parsedPersons = ParsePerson(filePath, true);
+var parsedPersons = ParsePerson(filePath, true); // Default skipHeader is 'false'. Set 'true' to skip header. 
 
 // Validate V1
 Console.WriteLine($"\nValidate v1");
-CsvValidator(parsedPersons);
+CsvValidator(parsedPersons);  
 
 
 // Parse V2
 Console.WriteLine("\nParse v2:\n");
 string filePathV2 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Files", "color_srgb.csv");
-var parsedSrgb = ParseRgbColor(filePathV2, true);
+var parsedSrgb = ParseRgbColor(filePathV2, true); // Default skipHeader is 'false'. Set 'true' to skip header. 
 
 // Validate V2
 Console.WriteLine($"\nValidate v2");
 CsvValidator(parsedSrgb);
+
+*/
 
 // Parse V3
 

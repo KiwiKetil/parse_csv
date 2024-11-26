@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using FluentValidation.Results;
+﻿using FluentValidation.Results;
 using Newtonsoft.Json;
 using Serilog;
 
@@ -27,7 +26,7 @@ public class ValidationService
                 validCount++;
                 Log.Information($"Validation success for {item!.GetType().Name}: {JsonConvert.SerializeObject(item)}"); //null check?
             }
-            else 
+            else
             {
                 inValidCount++;
                 var aggregatedErrors = string.Join(" | ", validationResult.Errors.Select(e => e.ErrorMessage));
