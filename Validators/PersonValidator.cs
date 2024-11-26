@@ -10,12 +10,12 @@ public class PersonValidator : AbstractValidator<Person>
         RuleFor(person => person.FirstName)
             .NotEmpty().WithMessage("FirstName can not be empty")
             .Length(2, 25).WithMessage("Firstname must be between 2 and 25 characters")
-            .Matches(@"^[a-zA-Z0-9 ]+$").WithMessage("Firstname can not contain special characters");
+            .Matches(@"^[a-zA-Z ]+$").WithMessage("Firstname can not contain special characters");
 
         RuleFor(person => person.LastName)
             .NotEmpty().WithMessage("LastName can not be empty")
             .Length(2, 25).WithMessage("LastName must be between 2 and 25 characters.")
-            .Matches(@"^[a-zA-Z0-9 ]+$").WithMessage("Lastname can not contain special characters");
+            .Matches(@"^[a-zA-Z ]+$").WithMessage("Lastname can not contain special characters");
 
         RuleFor(person => person.Email)
             .NotEmpty().WithMessage("Email is required")
@@ -27,6 +27,6 @@ public class PersonValidator : AbstractValidator<Person>
         RuleFor(person => person.Country)
             .Length(3, 30).WithMessage("Country must be between 3 and 30 characters")
             .NotEmpty().WithMessage("Country can not be empty")
-            .Matches(@"^[a-zA-Z0-9 ]+$").WithMessage("Country can not contain special characters");
+            .Matches(@"^[a-zA-Z ]+$").WithMessage("Country can not contain special characters");
     }
 }

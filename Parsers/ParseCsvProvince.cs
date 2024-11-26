@@ -2,28 +2,28 @@
 //using Serilog;
 
 //namespace ParseCsv.Parsers;
-
-//public static class CsvParser_v2
+//public static class ParseCsvProvince
 //{
-//    public static List<SRgbColor> ParseCsvFileV2(string filePath, bool skipHeader = true)
+//    public static IEnumerable<Province> ParseProvince(string filePath, bool skipHeader = true)
 //    {
 //        if (string.IsNullOrWhiteSpace(filePath) || !File.Exists(filePath))
 //        {
 //            throw new ArgumentException($"Filepath: \"{filePath}\" is invalid or file does not exist.");
 //        }
 
-//        int lineCounter = 0;
-//        List<SRgbColor> result = [];
+//        using var reader = new StreamReader(filePath);
 
-//        var lines = File.ReadLines(filePath);
+//        int lineCounter = 0;
 
 //        if (skipHeader)
 //        {
-//            lines = lines.Skip(1);
+//            reader.ReadLine();
 //            lineCounter++;
 //        }
 
-//        foreach (string line in lines)
+//        string? line;
+
+//        while ((line = reader.ReadLine()) != null)
 //        {
 //            lineCounter++;
 
@@ -33,15 +33,15 @@
 //                continue;
 //            }
 
-//            var split = line.Split(',', 3).Select(p => p.Trim().Trim('"')).ToArray(); // 3 only works if there are exactly 3 fields and field with extra ',' is last field (split[2])
+//            var split = line.Split(',').Select(p => p.Trim().Trim('"')).ToArray();
 
-//            if (split is not [var name, var hex, var rgb])
+//            if (split is not [var province, var abbreviation])
 //            {
-//                Log.Warning($"Failed parse on line {lineCounter}: {line} | Invalid field count. Expected 3 fields, but found {split.Length} fields.");
+//                Log.Warning($"Failed parse on line {lineCounter}: {line} | Invalid field count. Expected 2 fields, but found {split.Length} fields.");
 //                continue;
 //            }
 
-//            var validationErrors = ValidateCsvFields(name, hex, rgb);
+//            var validationErrors = ValidateCsvFields(province, abbreviation);
 
 //            if (validationErrors.Count > 0)
 //            {
@@ -49,16 +49,13 @@
 //                continue;
 //            }
 
-//            SRgbColor sRgb = new()
+//            Province provinceInfo = new()
 //            {
-//                Name = name,
-//                Hex = hex,
-//                Rgb = rgb,
+//                ProvinceName = province,
+//                Abbreviation = abbreviation,
 //            };
 
-//            result.Add(sRgb);
+//            yield return provinceInfo;
 //        }
-
-//        return result;
 //    }
 //}

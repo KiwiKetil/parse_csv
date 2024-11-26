@@ -3,9 +3,9 @@ using Serilog;
 
 namespace ParseCsv.Parsers;
 
-public static class ParseV1
+public static class ParseCsvPerson
 {
-    public static List<Person> ParseCsvFileV1(string filePath, bool skipHeader = true)
+    public static List<Person> ParsePerson(string filePath, bool skipHeader = true)
     {
         if (string.IsNullOrWhiteSpace(filePath) || !File.Exists(filePath))
         {
@@ -15,6 +15,7 @@ public static class ParseV1
         using var reader = new StreamReader(filePath);
 
         int lineCounter = 0;
+        int validCount = 0;
         List<Person> result = [];
 
         string? line;
@@ -58,10 +59,13 @@ public static class ParseV1
                     Age = age,
                     Country = country
                 };
-                Log.Information($"Successfully parsed line {lineCounter}: {firstName} {lastName}, Email: {email}, Age: {age}, Country: {country}");
+                Log.Information($"Successfully parsed line {lineCounter}: {firstName}, {lastName}, {email}, {age}, {country}");
+                validCount++;
                 result.Add(person);
             }
         }
+        Console.WriteLine();
+        Log.Information($"Parse completed. Total valid parsed: {validCount} out of {lineCounter}");
         return result;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Serilog;
-using static ParseCsv.Parsers.ParseV1;
-using static ParseCsv.Services.PersonValidationService;
+using static ParseCsv.Parsers.ParseCsvPerson;
+using static ParseCsv.Parsers.ParseCsvRgbColor;
+using static ParseCsv.Services.ValidationService;
 
 // Setup log and logfolder
 var projectDirectory = Directory.GetParent(AppContext.BaseDirectory)?.Parent?.Parent?.Parent?.FullName;
@@ -9,45 +10,29 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.File(Path.Combine(projectDirectory!, "logs/logs-.log"), rollingInterval: RollingInterval.Day)
     .CreateLogger();
 
+
 // Parse V1
-Console.WriteLine("Parse v1:\n");
-
+Console.WriteLine("Parse v1:");
 string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Files", "person.csv");
+var parsedPersons = ParsePerson(filePath, true);
 
-var parsedPersons = ParseCsvFileV1(filePath, false);
-ValidatePersons(parsedPersons);
-
-Console.WriteLine($"Parsed {parsedPersons.Count} persons.");
-
+// Validate V1
+Console.WriteLine($"\nValidate v1");
+CsvValidator(parsedPersons);
 
 
-//foreach (var person in res)
-//{
-//    Console.WriteLine($"{person}");
-//}
+// Parse V2
+Console.WriteLine("\nParse v2:\n");
+string filePathV2 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Files", "color_srgb.csv");
+var parsedSrgb = ParseRgbColor(filePathV2, true);
 
-//Console.WriteLine();
+// Validate V2
+Console.WriteLine($"\nValidate v2");
+CsvValidator(parsedSrgb);
 
-//// Parse V2
-//Console.WriteLine("Parse v2:\n");
-//string filePath2 = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ParseV2", "color_srgb.csv");
+// Parse V3
 
-//var res2 = ParseCsvFileV2(filePath2);
-//foreach (var line in res2)
-//{
-//    Console.WriteLine(line);
-//}
-
-//Console.WriteLine();
-
-//// ParseYield
-//Console.WriteLine("Parse yield:\n");
-//string filePathYield = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ParseYield", "province_ca.csv");
-//var resYield = ParseCsvFileYield(filePathYield);
-
-//foreach (var line in resYield)
-//    Console.WriteLine(line);
-
+// Validate V3
 
 
 // Ensure logs are flushed
