@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <None Remove="color_srgb.csv" />
+    <None Remove="Files\color_srgb.csv" />
     <None Remove="province_ca.csv" />
     <None Remove="test_parsing_fail.csv" />
   </ItemGroup>
@@ -28,6 +29,7 @@
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.11.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0" />
+    <PackageReference Include="MongoDB.Driver" Version="3.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Serilog" Version="4.1.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />

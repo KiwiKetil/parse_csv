@@ -1,4 +1,5 @@
 ﻿using ParseCsv.Entities;
+using ParseCsv.Splitters;
 using Serilog;
 
 namespace ParseCsv.Parsers;
@@ -34,7 +35,7 @@ public static class ParseCsvRgbColor
                 continue;
             }
 
-            var split = line.Split(',', 3).Select(p => p.Trim().Trim('"')).ToArray(); // 3 only works if there are exactly 3 fields and field with extra ',' is last field (split[2])
+            var split = ColorCsvSplitter.ManualSplitCsvLine(line);
 
             if (split is not [var name, var hex, var rgb])
             {
@@ -42,16 +43,22 @@ public static class ParseCsvRgbColor
                 continue;
             }
 
+            name = name.Trim().Trim('"');
+            hex = hex.Trim().Trim('"');
+            rgb = rgb.Trim().Trim('"');
+
             RgbColor sRgb = new()
             {
                 Name = name,
                 Hex = hex,
                 Rgb = rgb,
             };
+
             result.Add(sRgb);
             validCount++;
-            Log.Information($"Successfully parsed line {lineCounter}: {name} {hex}, {rgb}");
+            Log.Information($"Successfully parsed line {lineCounter}: {name}, {hex}, {rgb}");
         }
+
         Console.WriteLine();
         int totalProcessedLines = lineCounter - (skipHeader == true ? 1 : 0);
         Log.Information($"Parse completed. Total valid parsed: {validCount} out of {totalProcessedLines}");
