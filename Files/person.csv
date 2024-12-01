@@ -1,5 +1,5 @@
-
-James,Weirdo,john.doeexample.com,3x3,USA
+FirstName, LastName, Email, Age, Country
+James,Weirdo,john.doe@example.com,33,USA
 Jane,Smith,jane.smith@example.com,34,Canada
-#Indiana#,Jones,indaemail.no,44,Fran'ce
+Indiana,Jones,inda@email.no,44,France
 Jens,Jensemann, some@dodo.com, 66, Norway
